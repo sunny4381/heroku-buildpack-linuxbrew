@@ -20,7 +20,7 @@ To use this buildpack, you should prepare a .buildpacks file that contains this 
     https://github.com/sunny4381/heroku-buildpack-linuxbrew.git
 
     $ heroku create --buildpack https://github.com/heroku/heroku-buildpack-multi
-
+    $ heroku config:add LD_LIBRARY_PATH=/app/.linuxbrew/lib
     $ git push heroku master
     ...
 
