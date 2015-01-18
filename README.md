@@ -17,9 +17,9 @@ To use this buildpack, you should prepare a .buildpacks file that contains this 
     mecab-ipadic
     
     $ cat .buildpacks
-    https://github.com/sunny4381/heroku-buildpack-linuxbrew
+    https://github.com/sunny4381/heroku-buildpack-linuxbrew.git
 
-    $ heroku create --buildpack https://github.com/ddollar/heroku-buildpack-multi
+    $ heroku create --buildpack https://github.com/heroku/heroku-buildpack-multi
 
     $ git push heroku master
     ...
