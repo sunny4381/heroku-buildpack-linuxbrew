@@ -2,7 +2,7 @@
 
 BUILD_DIR=$1
 
-if [ -f "$BUILD_DIR/.celler" ]; then
+if [ -f "$BUILD_DIR/.cellar" ]; then
   echo "linuxbrew"
   exit 0
 else

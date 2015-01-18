@@ -8,23 +8,34 @@ echo "-----> Installing linuxbrew"
 BUILD_DIR=$1
 VENDOR_DIR="vendor"
 
-mkdir -p "$BUILD_DIR/$VENDOR_DIR"
-git clone "https://github.com/Homebrew/linuxbrew.git" "$BUILD_DIR/$VENDOR_DIR/linuxbrew"
+git clone "https://github.com/Homebrew/linuxbrew.git" \
+  "$HOME/.linuxbrew" 2>&1 | indent
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
-echo "exporting PATH and LIBRARY_PATH" | indent
 PROFILE_PATH="$BUILD_DIR/.profile.d/linuxbrew.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$BUILD_DIR/$VENDOR_DIR/bin:$PATH"' >> $PROFILE_PATH
-echo 'export MANPATH="$BUILD_DIR/$VENDOR_DIR/share/man:$MANPATH"' >> $PROFILE_PATH
-echo 'export INFOPATH="$BUILD_DIR/$VENDOR_DIR/share/info:$INFOPATH"' >> $PROFILE_PATH
-echo 'export LD_LIBRARY_PATH="$BUILD_DIR/$VENDOR_DIR/lib:$LD_LIBRARY_PATH"' >> $PROFILE_PATH
+cat << _EOT_ > $PROFILE_PATH
+export PATH="\$HOME/.linuxbrew/bin:\$PATH"
+export MANPATH="\$HOME/.linuxbrew/share/man:\$MANPATH"
+export INFOPATH="\$HOME/.linuxbrew/share/info:\$INFOPATH"
+export LD_LIBRARY_PATH="\$HOME/.linuxbrew/lib:\$LD_LIBRARY_PATH"
+_EOT_
+
+. $PROFILE_PATH
+cat $PROFILE_PATH | indent
 
 # install
-for formula in $(cat "$BUILD_DIR/.celler")
+for formula in $(cat "$BUILD_DIR/.cellar")
 do
-  echo "installing $formula" | indent
-  "$BUILD_DIR/$VENDOR_DIR/linuxbrew/bin/brew" install $formula
+  echo "-----> Installing $formula using brew"
+  brew install $formula | indent
   if [ $? -ne 0 ]; then
+    rm "$HOME/$VENDOR_DIR/linuxbrew"
     exit 1
   fi
 done
+
+# save '.linuxbrew'
+(cd $HOME && tar cf - .linuxbrew) | (cd $BUILD_DIR && tar xf -)

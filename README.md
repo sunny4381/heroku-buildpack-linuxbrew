@@ -8,11 +8,11 @@ Usage
 To use this buildpack, you should prepare a .buildpacks file that contains this buildpack url and your real buildpack url:
 
     $ ls
-    .celler
+    .cellar
     .buildpacks
     ...
 
-    $ cat .celler
+    $ cat .cellar
     mecab
     mecab-ipadic
     
